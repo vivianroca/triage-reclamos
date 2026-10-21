@@ -1,0 +1,20 @@
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Cada git push requiere aprobación del usuario.",
+    match = ["git push", "git push origin docs/reglas-agente"],
+)
+
+prefix_rule(
+    pattern = ["git", "push", ["--force", "--force-with-lease", "-f"]],
+    decision = "forbidden",
+    justification = "No se permiten pushes forzados. Utilizar un push normal.",
+    match = ["git push --force origin main", "git push --force-with-lease", "git push -f"],
+)
+
+prefix_rule(
+    pattern = ["git", "tag", ["-d", "--delete"]],
+    decision = "forbidden",
+    justification = "No se permite eliminar tags locales.",
+    match = ["git tag -d data-v1", "git tag --delete data-v1"],
+)
