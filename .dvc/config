@@ -1,0 +1,4 @@
+[core]
+    remote = local
+['remote "local"']
+    url = /Users/vivianroca/product-dev/dvc-storage/triage-reclamos
