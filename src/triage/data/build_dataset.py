@@ -61,17 +61,24 @@ def muestrear(df: pd.DataFrame, max_por_clase: int, seed: int) -> pd.DataFrame:
     return mezcla.groupby("clase").head(max_por_clase).sort_values("complaint_id").reset_index(drop=True)
 
 
-def leer_crudos(raw_dir: str) -> pd.DataFrame:
-    archivos = sorted(Path(raw_dir).glob("*.csv"))
-    if not archivos:
-        raise FileNotFoundError(f"No hay archivos .csv en {raw_dir}")
-    partes = [pd.read_csv(a, dtype=str, usecols=lambda c: c in COLUMNAS) for a in archivos]
-    return renombrar(pd.concat(partes, ignore_index=True))
+def leer_crudos(raw_dir: str, landing_dir: str = "data/landing") -> pd.DataFrame:
+    """Combina CSV de raw y Parquet de landing en el esquema del proyecto."""
+    csvs = sorted(Path(raw_dir).glob("*.csv"))
+    parquets = sorted(Path(landing_dir).glob("*.parquet"))
+    if not csvs and not parquets:
+        raise FileNotFoundError(
+            f"No hay archivos .csv en {raw_dir} ni .parquet en {landing_dir}"
+        )
+    partes = [renombrar(pd.read_csv(a, dtype=str, usecols=lambda c: c in COLUMNAS)) for a in csvs]
+    partes.extend(renombrar(pd.read_parquet(a)) for a in parquets)
+    return pd.concat(partes, ignore_index=True)
 
 
 def construir(params: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
     label_map = cargar_yaml(params["data"]["label_map"])
-    df = limpiar(leer_crudos(params["data"]["raw_dir"]))
+    df = limpiar(leer_crudos(
+        params["data"]["raw_dir"], params["data"].get("landing_dir", "data/landing")
+    ))
     df["clase"] = asignar_clase(df, label_map)
 
     corte = pd.Timestamp(params["split"]["val_start"])
