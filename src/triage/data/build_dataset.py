@@ -64,7 +64,7 @@ def muestrear(df: pd.DataFrame, max_por_clase: int, seed: int) -> pd.DataFrame:
 def leer_crudos(raw_dir: str, landing_dir: str = "data/landing") -> pd.DataFrame:
     """Combina CSV de raw y Parquet de landing en el esquema del proyecto."""
     csvs = sorted(Path(raw_dir).glob("*.csv"))
-    parquets = sorted(Path(landing_dir).glob("*.parquet"))
+    parquets = sorted(Path(landing_dir).rglob("*.parquet"))
     if not csvs and not parquets:
         raise FileNotFoundError(
             f"No hay archivos .csv en {raw_dir} ni .parquet en {landing_dir}"
