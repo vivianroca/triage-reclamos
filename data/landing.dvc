@@ -1,0 +1,6 @@
+outs:
+- md5: 1fbdc60b0a4e91dc1bee40fac8eadd3a.dir
+  size: 58134131
+  nfiles: 91
+  hash: md5
+  path: landing

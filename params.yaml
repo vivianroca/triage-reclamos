@@ -12,7 +12,7 @@ sample:
   max_por_clase_val: 1000
 
 split:
-  val_start: "2023-11-01"
+  val_start: "2024-03-01"
 
 features:
   tfidf:
