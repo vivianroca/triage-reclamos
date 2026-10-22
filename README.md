@@ -13,7 +13,8 @@ make test    # ejecuta las pruebas
 ```
 
 `make data` combina los CSV de `data/raw/` con los archivos `*.parquet` de
-`data/landing/` (configurable con `data.landing_dir` en `params.yaml`). Puede
+`data/landing/`, incluidas sus subcarpetas (configurable con `data.landing_dir`
+en `params.yaml`). Puede
 trabajar con una sola de las fuentes si la otra está vacía o no existe.
 Los Parquet pueden usar las columnas originales del CFPB o los nombres internos
 del proyecto. La limpieza, deduplicación y separación temporal se aplican al

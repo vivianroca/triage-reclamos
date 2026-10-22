@@ -87,7 +87,9 @@ def test_construir_integra_landing_con_deduplicacion_y_split_temporal(tmp_path):
     df.iloc[:1].rename(columns={v: k for k, v in COLUMNAS.items()}).to_csv(
         raw / "reclamos.csv", index=False
     )
-    df.to_parquet(landing / "reclamos.parquet", index=False)
+    particion = landing / "fecha=2023-11-01"
+    particion.mkdir()
+    df.to_parquet(particion / "reclamos.parquet", index=False)
     mapa = tmp_path / "label_map.yaml"
     mapa.write_text(yaml.safe_dump(LABEL_MAP), encoding="utf-8")
     params = {
